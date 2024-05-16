@@ -13,7 +13,6 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # Check if the post request has the file part
         if 'file' not in request.files:
             return 'No file part'
         
@@ -27,12 +26,11 @@ def index():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             
-            # Process the file
             df = pd.read_csv(filepath)
             
             grouped_data = df.groupby("Employee Export Code").agg({
                 "Employee Export Code": "first",
-                "Date": "max",  # Get the latest date
+                "Date": "max",
                 "Total Cost": "sum",
                 "Total Hours": "sum",
             })
